@@ -1,0 +1,434 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% for object in books %}
+
+
+
+<br>
+<div class="card mb-3"
+    style="max-width: 840px; background-color: #dcd7d7; box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);padding-top: 10px; padding-left:15px; ">
+    <div style="width: 100%;" class="row no-gutters">
+        <div class="col-md-4">
+            {% if object.images %}
+            <img style=" border-radius: 10px; height: 250rem;" src="/media/{{ object.images }}" class="card-img-top"
+                alt="...">
+            {% else %}
+            <img style="border-radius: 10px;  height: 25rem;" src="{{ object.image_url }}" class="card-img">
+            {% endif %}
+            <hr>
+            <h6>GENRE</h6>
+            <p style=" border: 1px solid rgb(59, 59, 59) ; border-radius: 30px; color: rgb(59, 59, 59);">
+                {{object.category1 }}</p>
+            {% if object.category2 == None %}
+            <p></p>
+            {% else %}
+            <p style=" border: 1px solid rgb(59, 59, 59) ; border-radius: 30px; color: rgb(59, 59, 59);">
+
+                {{object.category2 }}</p>
+            {% endif %}
+            {% if object.category3 == None %}
+            <p></p>
+            {% else %}
+            <p style=" border: 1px solid rgb(59, 59, 59) ; border-radius: 30px; color: rgb(59, 59, 59);">
+                {{object.category3 }}</p>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h4 class="card-title">{{ object.title }}</h4>
+                <p style="background-color:white ; border: 1px solid black; border-radius: 10px; color:rgb(59, 59, 59) ;"
+                    class="card-text">Author: {{ object.author }}</p>
+                {% if stars == 0 %}
+                <p style="background-color:white ; border: 1px solid black; border-radius: 10px; color:rgb(59, 59, 59) ;"
+                    class="card-text">Rating: 0 <span style=" font-size: larger; color: yellow ;">
+                        ★</span></p>
+                {% else %}
+                <p style="background-color:white ; border: 1px solid black; border-radius: 10px; color:rgb(59, 59, 59) ;"
+                    class="card-text">
+                    Rating: {{stars}} <span style=" font-size: larger; color: yellow ;">
+                        ★</span></p>
+                {% endif %}
+                <hr>
+                <textarea readonly
+                    style=" height: 15rem; width: 100%; background-color:white ; border-radius: 10px; color:rgb(59, 59, 59) ;"
+                    class="card-text">{{ object.description }}</textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% if object.pdf or object.pdfurl %}
+{% if object.book_available is True %}
+{% if object.pdfurl %}
+<a type="submit" style="width: 50%; margin-bottom: 20px;" class="btn btn-outline-success" role="button"
+    href="{{object.pdfurl}}" download>Read</a>
+
+{% else %}
+<a style="width: 50%; margin-bottom: 20px;" class="btn btn-outline-success" type="submit" role="button"
+    href="{{object.pdf.url}}" download>Read</a>
+
+
+
+{% endif %}
+{% else %}
+<h4 class="text-danger">Comming Soon !</h4>
+{% endif %}
+{% else %}
+<p style="color: red;">Error occured </p>
+{% endif %}
+
+<br>
+<br>
+
+
+
+<form
+    style=" background-color: #dcd7d7; box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);  padding:15px;border-radius: 10px; background-color: rgb(245, 245, 245);"
+    method="GET" action="/review/{{ object.id}}">
+    <h3 style=" text-align: center;">WRITE COMMENT </h3>
+    <hr>
+    <input hidden type="text" name="titleid" value="{{ object.id}}">
+
+    <div style="height: 80%;" class="form-group">
+        <input style="width:100%;height: 80%; border: 2px solid black ;border-radius: 10px; " name="user"
+            placeholder="Enter your name(optional)" value="Anonymous" type="text">
+        <small id="emailHelp" class="form-text text-muted">Enter Your Name.</small>
+    </div>
+    <br>
+
+    <div class="form-group">
+        <textarea style="border: 2px solid black; border-radius: 10px; width: 100%;"
+            placeholder="Enter your comment ........" name="comment" required></textarea>
+    </div>
+    <br>
+    <div class="form-group">
+        <select name="rating" style="border: 2px solid black; border-radius: 10px; width: 100%;" required>
+            <option selected disabled value="">Select Option... </option>
+            <option value="1">Really Bad </option>
+            <option value="2">Not Bad </option>
+            <option value="3">Average</option>
+            <option value="4">Good</option>
+            <option value="5">Excelent</option>
+
+        </select>
+        <small id="emailHelp" class="form-text text-muted">Select Rating.</small>
+    </div>
+    <br>
+    <br>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+
+
+
+
+<!-- comments -->
+<br>
+<br>
+{% if lencoments == 0 %}
+<p></p>
+{% else %}
+<hr>
+<h5 id="comment">READERS REVIEWS:{{lencoments}}</h5>
+<hr>
+{% endif %}
+<br><br>
+<div class="comment">
+    {% for i in reviews %}
+
+    <span style="text-align:left;">
+        <p style="text-align:left ;"><b>{{i.user}}</b><br>{{i.created}}</p>
+    </span>
+    {% if i.rating == 1 %}
+    <span style="  text-align:left;">
+        <p style="text-align:left ; color: yellow;">★</p>
+    </span>
+    {% elif i.rating == 2 %}
+    <span style="  text-align:left;">
+        <p style="text-align:left ; color: yellow;">★ ★</p>
+    </span>
+    {% elif i.rating == 3 %}
+    <span style="  text-align:left;">
+        <p style="text-align:left ; color: yellow;">★ ★ ★</p>
+    </span>
+    {% elif i.rating == 4 %}
+    <span style="  text-align:left;">
+        <p style="text-align:left ; color: yellow;">★ ★ ★ ★</p>
+    </span>
+    {% elif i.rating == 5 %}
+    <span style="  text-align:left;">
+        <p style="text-align:left ; color: yellow;">★ ★ ★ ★ ★</p>
+    </span>
+    {% endif %}
+    <p style="text-align:left ; width: 100%;  word-wrap:break-word;">{{i.comment}}</p>
+    <hr style="width:100%;">
+
+    {% endfor %}
+</div>
+{% if reviews.has_previous %}
+<a href="{{ object.id}}?page={{reviews.previous_page_number}}#comment">
+    << View Previous Comment </a>
+        {% endif %}
+        {% if reviews.has_next %}
+        <a href="{{ object.id}}?page={{reviews.next_page_number}}#comment">View More Comment >></a>
+        {% endif %}
+        <br><br>
+
+        <!-- end -->
+        <!--Similar product1 -->
+        <div class="container-fluid">
+            <br>
+            <br>
+            {% for i in products%}
+            {%if i.title != object.title%}
+            {%if i.category1 == object.category1 %}
+            <h1 style="text-transform: uppercase;"><b>POPULAR BOOKS IN {{ object.category1 }} </b></h1>
+            <br>
+            <!-- 
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+             <!-- -->
+
+
+            <!-- rough -->
+            {% for products, range, nSlides in allProds %}
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="container">
+                            <div class="row">
+                                {% for i in products%}
+                                {%if i.title != object.title%}
+
+                                {%if i.category1 == object.category1 %}
+
+                                <div class="col-sm-4">
+                                    <!-- new -->
+
+                                    <div class="my-card">
+                                        <div class="card-content">
+                                            <div class="img-place">
+                                                <div>
+                                                    {% if i.images %}
+                                                    <img style="height: 20rem;" src="/media/{{ i.images }}"
+                                                        class=" card-img-top" alt="...">
+                                                    {% else %}
+                                                    <img style="height: 20rem;" src="{{ i.image_url }}"
+                                                        class="card-img-top" alt="...">
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="card-text">
+                                                <h5>{{ i.title|slice:":25"}} ...</h5>
+                                                {% if i.book_available is True %}
+                                                <li class="text-primary">Available</li>
+                                                {% else %}
+                                                <li class="text-danger">Out of Stock !</li>
+                                                {% endif %}<br>
+                                                <a style="width:100%" class="btn" href="/productview/{{i.id}}"><i
+                                                        style="width: 50% ;" class="fa fa-magic"
+                                                        aria-hidden="true"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- e -->
+                                </div>
+                                {%if forloop.counter|divisibleby:3 and forloop.counter > 0 and not forloop %}
+                            </div>
+
+                        </div>
+                    </div>
+                    <hr>
+                    {%endif%}
+                    {%endif%}
+                    {%endif%}
+                    {%endfor%}
+
+                </div>
+
+            </div>
+
+            {% endfor%}
+            <!-- end -->
+
+
+            <!--Similar product2 -->
+            <br>
+            <br>
+            {%if object.category2 == None %}
+            <p></p>
+            {% else %}
+            {% for i in products%}
+            {%if i.title != object.title%}
+            {%if i.category2 == object.category2 %}
+            <h1 style="text-transform: uppercase;"><b>POPULAR BOOKS IN {{ object.category2 }} </b></h1>
+            <br>
+            <!-- 
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+             <!-- -->
+
+            {% for products, range, nSlides in allProds2 %}
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="container">
+                            <div class="row">
+                                {% for i in products%}
+                                {%if i.title != object.title%}
+
+                                {%if i.category2 == object.category2 %}
+
+                                <div class="col-sm-4">
+                                    <!-- new -->
+
+                                    <div class="my-card">
+                                        <div class="card-content">
+                                            <div class="img-place">
+                                                <div>
+                                                    {% if i.images %}
+                                                    <img style="height: 20rem;" src="/media/{{ i.images }}"
+                                                        class=" card-img-top" alt="...">
+                                                    {% else %}
+                                                    <img style="height: 20rem;" src="{{ i.image_url }}"
+                                                        class="card-img-top" alt="...">
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="card-text">
+                                                <h5>{{ i.title|slice:":25"}} ...</h5>
+                                                {% if i.book_available is True %}
+                                                <li class="text-primary">Available</li>
+                                                {% else %}
+                                                <li class="text-danger">Out of Stock !</li>
+                                                {% endif %}<br>
+                                                <a style="width:100%" class="btn" href="/productview/{{i.id}}"><i
+                                                        style="width: 50% ;" class="fa fa-magic"
+                                                        aria-hidden="true"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- e -->
+                                </div>
+                                {%if forloop.counter|divisibleby:3 and forloop.counter > 0 and not forloop %}
+                            </div>
+
+                        </div>
+                    </div>
+                    <hr>
+                    {%endif%}
+                    {%endif%}
+                    {%endif%}
+                    {%endfor%}
+
+                </div>
+
+            </div>
+
+            {% endfor%}
+            {% endif %}
+            <!-- end -->
+
+            <!-- similar product3 -->
+
+            <br>
+            <br>
+            {% if object.category3 == None %}
+            <p></p>
+            {% else %}
+            {% for i in products%}
+            {%if i.title != object.title%}
+            {%if i.category3 == object.category3 %}
+            <h1 style="text-transform: uppercase;"><b>POPULAR BOOKS IN {{ object.category3 }} </b></h1>
+            <br>
+            <!-- 
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+             <!-- -->
+
+            {% for products, range, nSlides in allProds3 %}
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="container">
+                            <div class="row">
+                                {% for i in products%}
+                                {%if i.title != object.title%}
+
+                                {%if i.category3 == object.category3 %}
+
+                                <div class="col-sm-4">
+                                    <!-- new -->
+
+                                    <div class="my-card">
+                                        <div class="card-content">
+                                            <div class="img-place">
+                                                <div>
+                                                    {% if i.images %}
+                                                    <img style="height: 20rem;" src="/media/{{ i.images }}"
+                                                        class=" card-img-top" alt="...">
+                                                    {% else %}
+                                                    <img style="height: 20rem;" src="{{ i.image_url }}"
+                                                        class="card-img-top" alt="...">
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="card-text">
+                                                <h5>{{ i.title|slice:":25"}} ...</h5>
+                                                {% if i.book_available is True %}
+                                                <li class="text-primary">Available</li>
+                                                {% else %}
+                                                <li class="text-danger">Out of Stock !</li>
+                                                {% endif %}<br>
+                                                <a style="width:100%" class="btn" href="/productview/{{i.id}}"><i
+                                                        style="width: 50% ;" class="fa fa-magic"
+                                                        aria-hidden="true"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- e -->
+                                </div>
+                                {%if forloop.counter|divisibleby:3 and forloop.counter > 0 and not forloop %}
+                            </div>
+
+                        </div>
+                    </div>
+                    <hr>
+                    {%endif%}
+                    {%endif%}
+                    {%endif%}
+                    {%endfor%}
+
+                </div>
+
+            </div>
+
+            {% endfor%}
+            {% endif %}
+
+            <!-- end -->
+
+
+
+
+
+        </div>
+
+        <!-- end -->
+
+
+        {% endfor %}
+        {% endblock content %}

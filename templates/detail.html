@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<br>
+<div class="card mb-3" style="max-width: 840px;">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      {% if object.images %}
+      <img style="height: 20rem;" src="/media/{{ object.images }}" class="card-img-top" alt="...">
+      {% else %}
+      <img src="{{ object.image_url }}" class="card-img">
+      {% endif %}
+      <hr>
+      <p><u> Categeory:</u> {{ object.category }}</p>
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h4 class="card-title">{{ object.title }}</h4>
+        <p class="card-text">Author: {{ object.author }}</p>
+        <hr>
+        <textarea readonly style="overflow: scroll; height: 15rem; width: 100%; "
+          class="card-text">{{ object.description }}</textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% if object.pdf or object.pdfurl %}
+{% if object.book_available is True %}
+{% if object.pdfurl %}
+<a class="btn btn-outline-success" role="button" href="{{object.pdfurl}}">Download</a>
+{% else %}
+<a class="btn btn-outline-success" role="button" href="{{object.pdf.url}}" download>Download</a>
+{% endif %}
+{% else %}
+<h4 class="text-danger">Comming Soon !</h4>
+{% endif %}
+{% else %}
+<p style="color: red;">Error occured Book Not Download </p>
+{% endif %}
+
+<form method="GET" action="/review/">
+  {% csrf_token %}
+  <div class="form-group">
+    <input type="text" name="titleid" value="{{ object.id}}">
+    <label for="exampleInputEmail1">Commnts</label>
+    <textarea style="border: 2px solid black;" name="comment" id="" cols="60" rows="10"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+<!-- comments style -->
+<style>
+  .avatar {
+    position: relative;
+    display: inline-block;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.25rem;
+  }
+
+  .avatar-img,
+  .avatar-initials,
+  .avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+  }
+
+  .avatar-img {
+    display: block;
+    -o-object-fit: cover;
+    object-fit: cover;
+  }
+
+  .avatar-initials {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    color: #fff;
+    line-height: 0;
+    background-color: #a0aec0;
+  }
+
+  .avatar-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #a0aec0 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='%23fff' d='M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z'/%3e%3c/svg%3e") no-repeat center/1.75rem;
+  }
+
+  .avatar-indicator {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 20%;
+    height: 20%;
+    display: block;
+    background-color: #a0aec0;
+    border-radius: 50%;
+  }
+
+  .avatar-group {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+  }
+
+  .avatar-group .avatar+.avatar {
+    margin-left: -0.75rem;
+  }
+
+  .avatar-group .avatar:hover {
+    z-index: 1;
+  }
+
+  .avatar-sm,
+  .avatar-group-sm>.avatar {
+    width: 2.125rem;
+    height: 2.125rem;
+    font-size: 1rem;
+  }
+
+  .avatar-sm .avatar-placeholder,
+  .avatar-group-sm>.avatar .avatar-placeholder {
+    background-size: 1.25rem;
+  }
+
+  .avatar-group-sm>.avatar+.avatar {
+    margin-left: -0.53125rem;
+  }
+
+  .avatar-lg,
+  .avatar-group-lg>.avatar {
+    width: 4rem;
+    height: 4rem;
+    font-size: 1.5rem;
+  }
+
+  .avatar-lg .avatar-placeholder,
+  .avatar-group-lg>.avatar .avatar-placeholder {
+    background-size: 2.25rem;
+  }
+
+  .avatar-group-lg>.avatar+.avatar {
+    margin-left: -1rem;
+  }
+
+  .avatar-light .avatar-indicator {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.75);
+  }
+
+  .avatar-group-light>.avatar {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.75);
+  }
+
+  .avatar-dark .avatar-indicator {
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+  }
+
+  .avatar-group-dark>.avatar {
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Font not working in <textarea> for this version of bs */
+
+  textarea {
+    font-family: inherit;
+  }
+</style>
+<!-- end -->
+
+<!-- comments -->
+<div class="d-flex align-items-center justify-content-center vh-100">
+  <div class="container">
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-8">
+        <h5>2 Comments</h5>
+      </div>
+    </div>
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-8">
+        <div class="comments">
+          <div class="comment d-flex mb-4">
+            <div class="flex-grow-1 ms-2 ms-sm-3">
+              <div class="comment-meta d-flex align-items-baseline">
+                <h6 class="me-2">Jordan Singer</h6>
+                <span class="text-muted">2d</span>
+              </div>
+              <div class="comment-body">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Non minima ipsum at amet doloremque qui magni,
+                placeat deserunt pariatur itaque laudantium impedit aliquam eligendi repellendus excepturi quibusdam
+                nobis esse accusantium.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="comment-form d-flex align-items-center">
+          <div class="flex-shrink-0">
+            <div class="avatar avatar-sm rounded-circle">
+              <img class="avatar-img"
+                src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&crop=faces&fit=crop&h=200&w=200"
+                alt="">
+            </div>
+          </div>
+          <div class="flex-grow-1 ms-2 ms-sm-3">
+            <form>
+              <textarea class="form-control py-0 px-1 border-0" rows="1" placeholder="Start writing..."
+                style="resize: none;"></textarea>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end -->
+
+
+{% endblock content %}

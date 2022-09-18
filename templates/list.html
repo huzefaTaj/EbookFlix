@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Button  modal -->
+
+<button style="position:fixed; bottom:1%; left: 1% ;" type="button" class="btn btn-dark" data-toggle="modal"
+    data-target="#staticBackdrop">
+    <i style="font-size:24px" class="fa">&#xf0b0;</i>
+</button>
+
+<!-- Button trigger modal -->
+
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel"><i style="font-size:24px" class="fa">&#xf0b0;</i></h5>
+            </div>
+            <div class="modal-body">
+                <a href="/" class="list-group-item list-group-item-action">All Gener</a>
+                {% for category in categories1 %}
+
+                <a href="/?category={{category.id}}"
+                    class="list-group-item list-group-item-action">{{category.name}}</a>
+                {% endfor %}
+
+                <!-- category2 -->
+                {% for cat2 in categories2 %}
+                <a href="/?category2={{cat2.id}}" class="list-group-item list-group-item-action">{{cat2.name}}</a>
+                <p>{{categories1.name}}</p>
+                {% endfor %}
+
+                <!-- category3 -->
+                {% for cat3 in categories3 %}
+                <a href="/?category3={{cat3.id}}" class="list-group-item list-group-item-action">{{cat3.name}}</a>
+                {% endfor %}
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- all -->
+<br>
+{% for books, range, nSlides in allProds %}
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="container">
+                <div class="row">
+                    {% for i in books%}
+
+
+                    <div class="col-sm-4">
+                        <!-- new -->
+
+                        <div class="my-card">
+                            <div class="card-content">
+                                <div class="img-place">
+                                    <div>
+                                        {% if i.images %}
+                                        <img style="height: 20rem;" src="/media/{{ i.images }}" class=" card-img-top"
+                                            alt="...">
+                                        {% else %}
+                                        <img style="height: 20rem;" src="{{ i.image_url }}" class="card-img-top"
+                                            alt="...">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="card-text">
+                                    <h5>{{ i.title|slice:":25"}} ...</h5>
+                                    {% if i.book_available is True %}
+                                    <li class="text-primary">Available</li>
+                                    {% else %}
+                                    <li class="text-danger">Out of Stock !</li>
+                                    {% endif %}<br>
+                                    <input hidden name="seoclicks" value="{{object.seoclicks}}" type="text">
+                                    <a style="width:100%" class="btn" href="/productview/{{i.id}}"><i
+                                            style="width: 50% ;" class="fa fa-magic" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+
+                        <!-- e -->
+                    </div>
+                    {%if forloop.counter|divisibleby:3 and forloop.counter > 0 and not forloop %}
+                </div>
+
+            </div>
+        </div>
+        <hr>
+        {%endif%}
+        {%endfor%}
+
+    </div>
+
+</div>
+{% endfor %}
+<hr>
+<!-- mv -->
+<h1 id="choice" style="text-align:left; color:rgb(30, 29, 29);font-family: Snell Roundhand, cursive; margin: 20px;">
+    PEOPLE'S
+    CHOICE:
+</h1>
+{% for mostview, range, nSlides in mv %}
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="container">
+                <div class="row">
+                    {% for i in mostview %}
+
+                    <div class="col-sm-4">
+                        <!-- new -->
+
+                        <div class="my-card">
+                            <div class="card-content">
+                                <div class="img-place">
+                                    <div>
+                                        {% if i.images %}
+                                        <img style="height: 20rem;" src="/media/{{ i.images }}" class=" card-img-top"
+                                            alt="...">
+                                        {% else %}
+                                        <img style="height: 20rem;" src="{{ i.image_url }}" class="card-img-top"
+                                            alt="...">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="card-text">
+                                    <h5>{{ i.title|slice:":25"}} ...</h5>
+                                    {% if i.book_available is True %}
+                                    <li class="text-primary">Available</li>
+                                    {% else %}
+                                    <li class="text-danger">Out of Stock !</li>
+                                    {% endif %}<br>
+                                    <input hidden name="seoclicks" value="{{object.seoclicks}}" type="text">
+                                    <a style="width:100%" class="btn" href="/productview/{{i.id}}"><i
+                                            style="width: 50% ;" class="fa fa-magic" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+
+                        <!-- e -->
+                    </div>
+                    {%if forloop.counter|divisibleby:3 and forloop.counter > 0 and not forloop %}
+                </div>
+
+            </div>
+        </div>
+        <hr>
+        {%endif%}
+        {%endfor%}
+
+    </div>
+
+</div>
+
+{% if page.has_previous %}
+<a href="/?page={{page.previous_page_number}}#choice">
+    << Previous </a>
+        {% endif %}
+
+        {% if page.has_next %}
+        <a href="/?page={{page.next_page_number}}#choice">Next >></a>
+        {% endif %}
+        <br><br>
+        <!-- end -->
+        {% endfor %}
+
+        {% endblock content %}
