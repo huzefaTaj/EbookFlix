@@ -1,5 +1,4 @@
 import re
-from turtle import title
 from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render ,redirect
 import datetime
