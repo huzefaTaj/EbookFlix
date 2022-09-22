@@ -38,7 +38,12 @@
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h4 class="card-title">{{ object.title }}</h4>
+                <h4 class="card-title">{{ object.title }} </h4>
+                {% if object.seoclicks >= 500 %}
+                <i class="fa fa-eye" aria-hidden="true">500+</i>
+                {% else %}
+                <i class="fa fa-eye" aria-hidden="true">{{object.seoclicks}}</i>
+                {% endif %}
                 <p style="background-color:white ; border: 1px solid black; border-radius: 10px; color:rgb(59, 59, 59) ;"
                     class="card-text">Author: {{ object.author }}</p>
                 {% if stars == 0 %}
